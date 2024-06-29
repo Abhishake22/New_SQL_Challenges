@@ -1,0 +1,28 @@
+---Query to Find Employees Hired in the Last 30 Days
+
+CREATE TABLE employees_1 (
+    employee_id INT IDENTITY(1,1) PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    hire_date DATE
+);
+
+INSERT INTO employees_1 (first_name, last_name, hire_date) VALUES
+('John', 'Doe', '2024-06-01'),
+('Jane', 'Smith', '2024-06-15'),
+('Alice', 'Johnson', '2024-06-20'),
+('Bob', 'Brown', '2024-05-20'),
+('Carol', 'Davis', '2024-06-28'),
+('David', 'Miller', '2024-04-10'),
+('Eve', 'Wilson', '2024-04-25'),
+('Frank', 'Moore', '2024-04-30'),
+('Grace', 'Taylor', '2024-04-15');
+
+
+Query:
+
+SELECT *
+FROM employees_1
+WHERE hire_date >= DATEADD(DAY,-30,GETDATE())
+
+
