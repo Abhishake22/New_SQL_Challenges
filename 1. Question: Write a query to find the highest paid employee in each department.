@@ -1,0 +1,71 @@
+Question: Write a query to find the highest paid employee in each department.
+
+CREATE TABLE Departments (
+    DepartmentID INT PRIMARY KEY,
+    DepartmentName VARCHAR(100)
+);
+
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY,
+    EmployeeName VARCHAR(100),
+    DepartmentID INT,
+    Salary DECIMAL(10, 2),
+    FOREIGN KEY (DepartmentID) REFERENCES Departments(DepartmentID)
+);
+
+
+INSERT INTO Departments (DepartmentID, DepartmentName) VALUES
+(1, 'HR'),
+(2, 'Engineering'),
+(3, 'Sales');
+
+
+INSERT INTO Employees (EmployeeID, EmployeeName, DepartmentID, Salary) VALUES
+(1, 'Alice', 1, 70000.00),
+(2, 'Bob', 1, 80000.00),
+(3, 'Charlie', 2, 120000.00),
+(4, 'Dave', 2, 110000.00),
+(5, 'Eve', 3, 90000.00),
+(6, 'Frank', 3, 95000.00);
+
+
+
+Query:
+
+ Method 1: Using CTE
+
+ WITH CTE AS (SELECT d.DepartmentID as dept_id,departmentname as dept_name,employeename as emp_name,Salary,RANK() OVER (PARTITION BY d.DepartmentID ORDER BY Salary desc) as Top_paid_salary
+FROM Departments d
+JOIN Employees e
+ON d.DepartmentID = e.DepartmentID
+)
+SELECT dept_id,dept_name,emp_name,salary
+FROM CTE
+WHERE Top_paid_salary = 1
+
+
+Method 2: Using Sub query
+
+SELECT 
+    d.DepartmentName,
+    e.EmployeeName,
+    e.Salary
+FROM 
+    Employees e
+JOIN 
+    Departments d ON e.DepartmentID = d.DepartmentID
+WHERE 
+    (e.DepartmentID, e.Salary) IN (
+        SELECT 
+            DepartmentID, 
+            MAX(Salary) 
+        FROM 
+            Employees 
+        GROUP BY 
+            DepartmentID
+    );
+
+
+
+  
+ 
