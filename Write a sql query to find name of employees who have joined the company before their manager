@@ -27,3 +27,12 @@ FROM Employees e1
 JOIN Employees e2
 ON e1.ManagerID = e2.EmployeeID
 AND e1.Join_date < e2.Join_date
+
+
+or
+
+SELECT e1.Name
+FROM Employees e1,Employees e2
+WHERE e1.ManagerID = e2.EmployeeID
+AND e1.Join_date < e2.Join_date
+
