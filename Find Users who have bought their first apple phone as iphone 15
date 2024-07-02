@@ -1,0 +1,22 @@
+Find Users who have bought their first apple phone as iphone 15
+
+CREATE TABLE phones (
+    user_id INT NOT NULL,
+    model NVARCHAR(10) NOT NULL
+);
+
+INSERT INTO phones (user_id, model) VALUES
+(1, 'i-13'),
+(1, 'i-15'),
+(2, 'i-15');
+
+Query:
+
+WITH CTE AS (SELECT user_id,COUNT(CASE WHEN model = 'i-15' THEN 1 ELSE 0 END ) AS Flag_count,
+COUNT(model) AS Total_count
+FROM phones 
+GROUP BY user_id
+)
+SELECT user_id
+FROM CTE
+WHERE Flag_count = Total_count
