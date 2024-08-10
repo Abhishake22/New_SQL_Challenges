@@ -1,0 +1,39 @@
+Table schema:
+
+create table hospital ( emp_id int
+, action varchar(10)
+, time datetime);
+
+insert into hospital values ('1', 'in', '2019-12-22 09:00:00');
+insert into hospital values ('1', 'out', '2019-12-22 09:15:00');
+insert into hospital values ('2', 'in', '2019-12-22 09:00:00');
+insert into hospital values ('2', 'out', '2019-12-22 09:15:00');
+insert into hospital values ('2', 'in', '2019-12-22 09:30:00');
+insert into hospital values ('3', 'out', '2019-12-22 09:00:00');
+insert into hospital values ('3', 'in', '2019-12-22 09:15:00');
+insert into hospital values ('3', 'out', '2019-12-22 09:30:00');
+insert into hospital values ('3', 'in', '2019-12-22 09:45:00');
+insert into hospital values ('4', 'in', '2019-12-22 09:45:00');
+insert into hospital values ('5', 'out', '2019-12-22 09:40:00');
+
+
+Query:
+
+----Write a SQL Query to find number of employees inside the hospital.
+
+
+Solution:
+
+SELECT * from hospital
+
+WITH CTE_A AS (SELECT emp_id,MAX(time) as latest_time
+FROM hospital
+GROUP BY emp_id),
+CTE_B AS (SELECT emp_id,MAX(time) as latest_in_time
+FROM hospital
+where action = 'in'
+group by emp_id)
+SELECT * FROM CTE_A a
+JOIN CTE_B b
+ON a.emp_id = b.emp_id AND a.latest_time = b.latest_in_time
+
